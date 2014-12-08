@@ -1,14 +1,23 @@
 package com.zhuwen.recorder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 public class Recorder extends Activity 
 {
+	private final String DEBUG_TAG = "touchEvent";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -19,18 +28,20 @@ public class Recorder extends Activity
 		
 	}
 
-	private List<Map<String, Object>> getData()
+/*	private List<Map<String, Object>> getData()
 	{
 		List<Map<String, Object>> eventList = new ArrayList<Map<String, Object>>();
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("eventitem_textview", )
-	}
+		map.put("eventitem_textview", );
+	}*/
 
+	//capturing touch events for Recorder activity
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		int action = MotionEventCompat.getActionMasked(eventE);
+		int action = MotionEventCompat.getActionMasked(event);
 		switch(action)
+		{
 			case (MotionEvent.ACTION_DOWN) :
 				Log.d(DEBUG_TAG,"Action was DOWN");	
 				return true;
@@ -44,11 +55,11 @@ public class Recorder extends Activity
 				 Log.d(DEBUG_TAG,"Action was CANCEL");
 				 return true;
 			case (MotionEvent.ACTION_OUTSIDE) :
-				Log.d(DEBUG_TAG,"Movement occurred outside bounds " +e "of current screen element");
+				Log.d(DEBUG_TAG,"Movement occurred outside bounds of current screen element");
 				return true;      
 			default :   
 				return super.onTouchEvent(event);
-			}
+		}
 	}
 	public void CreateEvent_click(View view)
 	{
