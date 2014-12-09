@@ -1,23 +1,22 @@
 package com.zhuwen.recorder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-public class Recorder extends Activity 
+public class Recorder extends Activity implements
+	GestureDetector .OnGestureListener,
+	GestureDetector.OnDoubleTapListener
 {
 	private final String DEBUG_TAG = "touchEvent";
+	private GestureDetectorCompat mDetector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -25,7 +24,8 @@ public class Recorder extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recorder);
 		//SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.activity_event_item, )
-		
+		mDetector = new GestureDetectorCompat(this, this);
+		mDetector.setOnDoubleTapListener(this);
 	}
 
 /*	private List<Map<String, Object>> getData()
@@ -39,28 +39,78 @@ public class Recorder extends Activity
 	//capturing touch events for Recorder activity
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		int action = MotionEventCompat.getActionMasked(event);
-		switch(action)
-		{
-			case (MotionEvent.ACTION_DOWN) :
-				Log.d(DEBUG_TAG,"Action was DOWN");	
-				return true;
-			case (MotionEvent.ACTION_MOVE) :
-				Log.d(DEBUG_TAG,"Action was MOVE");
-				return true;
-			case (MotionEvent.ACTION_UP) :
-				Log.d(DEBUG_TAG,"Action was UP");
-				return true;
-			case (MotionEvent.ACTION_CANCEL) :
-				 Log.d(DEBUG_TAG,"Action was CANCEL");
-				 return true;
-			case (MotionEvent.ACTION_OUTSIDE) :
-				Log.d(DEBUG_TAG,"Movement occurred outside bounds of current screen element");
-				return true;      
-			default :   
-				return super.onTouchEvent(event);
-		}
+		this.mDetector.onTouchEvent(event);
+		// Be sure to call the superclass implementation
+		return super.onTouchEvent(event);
 	}
+	
+	@Override
+	public boolean onSingleTapConfirmed(MotionEvent e) 
+	{
+		Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + e.toString());
+		return false;
+	}
+
+	@Override
+	public boolean onDoubleTap(MotionEvent e) 
+	{
+		Log.d(DEBUG_TAG, "onDoubleTap: " + e.toString());
+		return false;
+	}
+
+	@Override
+	public boolean onDoubleTapEvent(MotionEvent e)
+	{
+		Log.d(DEBUG_TAG, "onDoubleTapEvent: " + e.toString());
+		return false;
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) 
+	{
+		Log.d(DEBUG_TAG, "onDown: " + e.toString());
+		return true;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) 
+	{
+		Log.d(DEBUG_TAG, "onShowPress: " + e.toString());
+		
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) 
+	{
+		Log.d(DEBUG_TAG, "onSingleTapUp: " + e.toString());
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) 
+	{
+		Log.d(DEBUG_TAG, "onScroll: " + e1.toString() + e2.toString());
+		Log.d(DEBUG_TAG, "onFling: " + distanceX + distanceY);
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) 
+	{
+		Log.d(DEBUG_TAG, "onLongPress: " + e.toString());
+		
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) 
+	{
+		Log.d(DEBUG_TAG, "onFling: " + e1.toString() + e2.toString());
+		Log.d(DEBUG_TAG, "onFling: " + velocityX + velocityY);
+		return true;
+	}
+	
 	public void CreateEvent_click(View view)
 	{
 		Toast.makeText(this, "Create event.", Toast.LENGTH_SHORT).show();
@@ -85,4 +135,6 @@ public class Recorder extends Activity
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	
 }
